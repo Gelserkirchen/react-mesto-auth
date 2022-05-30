@@ -1,0 +1,45 @@
+.profile__avatar {
+    background-image: url("../../../../src/images/profile_photo.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0 30px 0 0;
+    padding: 0;
+    min-width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    z-index: 0;
+    position: relative;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile__avatar::before {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #000;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity .3s;
+    border-radius: 50%;
+    background-image: url("../../../../src/images/__edit-avatar.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.profile__avatar:hover::before {
+    opacity: 0.8;
+}
+
+@media screen and (max-width: 900px) {
+    .profile__avatar {
+        margin: 0 auto 26px;
+        width: unset;
+    }
+}

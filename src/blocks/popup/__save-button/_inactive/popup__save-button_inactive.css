@@ -1,0 +1,18 @@
+.popup__save-button_inactive {
+    background-color: #fff;
+    border: 1px solid #CCC;
+    color: #CCC;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@media screen and (max-width: 370px) {
+    .popup__save-button_inactive {
+        font-size: 14px;
+        line-height: 17px;
+        min-height: 46px;
+    }
+}

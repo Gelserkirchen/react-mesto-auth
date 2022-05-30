@@ -1,0 +1,6 @@
+.image-popup {
+    background: rgba(0, 0, 0, 0.9);
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s;
+}

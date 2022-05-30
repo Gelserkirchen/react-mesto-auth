@@ -1,0 +1,13 @@
+.popup__input-error {
+    display: none;
+}
+
+.popup__input-error:invalid {
+    border-bottom: 1px solid red;
+    display: block;
+}
+
+.popup__input-error:valid {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    display: none;
+}
