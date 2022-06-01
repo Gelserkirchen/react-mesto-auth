@@ -49,8 +49,6 @@ function App() {
     auth.signUp(email, password).then((res) => {
       setTooltipData({ isOpen: true, isError: false })
     }).then(() => {
-      debugger
-      console.log('заходим в регистрацию')
       redirectToLogin();
       handleSignIn({ email, password });
     }).catch((err) => {
@@ -61,14 +59,12 @@ function App() {
 
   function handleSignIn({ email, password }) {
     auth.signIn(email, password).then((res) => {
-      console.log('заносим токен ')
       if (res.token) {
         localStorage.setItem('jwt', res.token);
         setIsAuth(true);
 
       }
     }).then(() => {
-      console.log('проверяем токен')
       tockenCheck();
     }).catch((err) => {
       console.log('Ошибка входа', err);
@@ -76,16 +72,15 @@ function App() {
   }
 
   function redirectToLogin() {
-    history('/login');
+    history('/signin');
   }
 
   function redirectToRegister() {
-    history('/register');
+    history('/signup');
   }
 
   function tockenCheck() {
     if (localStorage.getItem('jwt')) {
-      console.log('запрашиваем jwt на сервере')
       let jwt = localStorage.getItem('jwt');
       auth.isAuth(jwt).then((res) => {
 
@@ -99,7 +94,6 @@ function App() {
 
         }
       }).then(() => {
-        console.log('переходим на главную страницу')
         history('/');
       }).catch((err) => {
         console.log('Ошибка авторизации', err)
@@ -160,7 +154,7 @@ function App() {
     localStorage.removeItem('jwt');
     setIsAuth(false);
     setUserData({});
-    history('/register');
+    history('/signup');
   }
 
   useEffect(() => {
@@ -190,17 +184,15 @@ function App() {
 
   }, [])
 
-  const hery = 'hery'
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
 
         <Routes>
-          <Route exact path="/login" isAuth={isAuth} element={<Login onSignIn={handleSignIn} tockenCheck={tockenCheck} redirectToRegister={redirectToRegister} />}></Route>
-          <Route exact path="/register" isAuth={isAuth} element={<Register onSignUp={handleSignUp} redirectToLogin={redirectToLogin} />}></Route>
+          <Route exact path="/signin" isAuth={isAuth} element={<Login onSignIn={handleSignIn} tockenCheck={tockenCheck} redirectToRegister={redirectToRegister} />}></Route>
+          <Route exact path="/signup" isAuth={isAuth} element={<Register onSignUp={handleSignUp} redirectToLogin={redirectToLogin} />}></Route>
           <Route path="/" element={
-            <ProtectedRoute isAuth={isAuth} hery={hery}>
+            <ProtectedRoute isAuth={isAuth}>
               <Header isAuth={isAuth} userData={userData} title={'Выйти'} handleClick={signOut} />
               <Main onEditProfile={handleEditProfileClick}
                 onAddPlace={handleAddPlaceClick}
@@ -211,7 +203,7 @@ function App() {
                 onCardDelete={handleCardDelete} />
             </ProtectedRoute>
           }></Route>
-          <Route element={isAuth ? <Navigate to="/" /> : <Navigate to="/login" />}></Route>
+          <Route element={isAuth ? <Navigate to="/" /> : <Navigate to="/signin" />}></Route>
         </Routes>
 
         <InfoTooltip tooltipData={tooltipData} onClose={closeAllPopups} />

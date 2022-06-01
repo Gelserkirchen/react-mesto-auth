@@ -52,6 +52,10 @@
 @import url(../src/blocks/login/__input/login__input.css);
 @import url(../src/blocks/login/__bottom-message/login__bottom-message.css);
 @import url(../src/blocks/login/__bottom-link/login__bottom-link.css);
+@import url(../src/blocks/popup/_type_register/popup_type_register.css);
+@import url(../src/blocks/popup/__container/_register/popup__container_type_register.css);
+@import url(../src/blocks/popup/__title/_register/popup__title_type_register.css);
+@import url(../src/blocks/popup/__image/popup__image.css);
 
 
 
