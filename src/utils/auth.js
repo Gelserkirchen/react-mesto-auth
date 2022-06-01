@@ -28,12 +28,17 @@ class Auth {
             .then(res => res.ok ? res.json() : Promise.reject('Ошибка: ', res.status))
     }
 
-    isAuth() {
+    isAuth(jwt) {
         return fetch(`${this._baseUrl}/users/me`, {
-            headers: this._headers
-        }).then(res => res.ok ? res.json() : Promise.reject('Ошибка: ', res.status))
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwt}`,
+            },
+        })
+            .then(res => res.ok ? res.json() : Promise.reject('Ошибка: ', res.status))
     }
-}
+}    
 
 export const auth = new Auth({
     baseUrl: 'https://auth.nomoreparties.co',

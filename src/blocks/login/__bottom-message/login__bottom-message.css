@@ -1,0 +1,11 @@
+.login__bottom-message {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 15px auto 0;
+    color: #fff;
+    font-family: "Inter", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 17px;
+    font-weight: 400;
+}

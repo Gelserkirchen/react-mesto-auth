@@ -19,9 +19,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         onAddPlace({
             name: place,
             link: link,
-        }).then(
-            
-        );
+        })
     }
 
     useEffect(() => {
@@ -46,4 +44,4 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     );
 }
 
-export default AddPlacePopup; 
+export default AddPlacePopup;

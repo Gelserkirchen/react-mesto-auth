@@ -47,6 +47,11 @@
 @import url(../src/blocks/login/login.css);
 @import url(../src/blocks/login/__label/login__label.css);
 @import url(../src/blocks/login/__submit-button/login__submit-button.css);
+@import url(../src/blocks/header/__text-link/header__text-link.css);
+@import url(../src/blocks/header/__menu/header__menu.css);
+@import url(../src/blocks/login/__input/login__input.css);
+@import url(../src/blocks/login/__bottom-message/login__bottom-message.css);
+@import url(../src/blocks/login/__bottom-link/login__bottom-link.css);
 
 
 

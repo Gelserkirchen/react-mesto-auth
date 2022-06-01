@@ -1,6 +1,9 @@
+import React from 'react'
 import Header from './Header'
+import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import Main from './Main'
 import Login from './Login'
+import InfoTooltip from './InfoTooltip'
 import Register from './Register'
 import ProtectedRoute from './ProtectedRoute'
 import ImagePopup from './ImagePopup'
@@ -18,10 +21,13 @@ function App() {
   const [isAddPlacePopupOpen, setAddPlacePopupState] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupState] = useState(false);
   const [isImagePopupOpen, setImagePopupState] = useState(false);
+  const [tooltipData, setTooltipData] = useState({});
   const [selectedCard, setSelectedCard] = useState({ link: '', name: '' });
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [isAuth, setIsAuth] = useState(false);
+  const [userData, setUserData] = useState({});
+  const history = useNavigate();
 
   function handleEditProfileClick() { setEditProfileState(!isEditProfilePopupOpen) }
   function handleAddPlaceClick() { setAddPlacePopupState(!isAddPlacePopupOpen) }
@@ -36,31 +42,74 @@ function App() {
     setAddPlacePopupState(false)
     setEditAvatarPopupState(false)
     setImagePopupState(false)
+    setTooltipData({ isOpen: false })
   }
 
   function handleSignUp({ email, password }) {
     auth.signUp(email, password).then((res) => {
+      setTooltipData({ isOpen: true, isError: false })
+    }).then(() => {
       debugger
-      console.log('результат регистрации', res)
-      handleSignIn({email, password})
-    })
-    .catch((err) => {
+      console.log('заходим в регистрацию')
+      redirectToLogin();
+      handleSignIn({ email, password });
+    }).catch((err) => {
+      setTooltipData({ isOpen: true, isError: true })
       console.log('Ошибка регистрации', err)
     })
   }
 
-  function handleSignIn({email, password}) {
+  function handleSignIn({ email, password }) {
     auth.signIn(email, password).then((res) => {
-      console.log('должен показаться токен', res)
+      console.log('заносим токен ')
       if (res.token) {
-          localStorage.setItem('jwt', res.token)
-          setIsAuth(true);
-          console.log(localStorage.getItem('jwt'))
+        localStorage.setItem('jwt', res.token);
+        setIsAuth(true);
+
       }
+    }).then(() => {
+      console.log('проверяем токен')
+      tockenCheck();
     }).catch((err) => {
-      console.log('Ошибка входа', err)
+      console.log('Ошибка входа', err);
     })
   }
+
+  function redirectToLogin() {
+    history('/login');
+  }
+
+  function redirectToRegister() {
+    history('/register');
+  }
+
+  function tockenCheck() {
+    if (localStorage.getItem('jwt')) {
+      console.log('запрашиваем jwt на сервере')
+      let jwt = localStorage.getItem('jwt');
+      auth.isAuth(jwt).then((res) => {
+
+        if (res) {
+          let userData = {
+            email: res.data.email
+          }
+
+          setIsAuth(true);
+          setUserData(userData);
+
+        }
+      }).then(() => {
+        console.log('переходим на главную страницу')
+        history('/');
+      }).catch((err) => {
+        console.log('Ошибка авторизации', err)
+      });
+    }
+  }
+
+  useEffect(() => {
+    tockenCheck();
+  }, [])
 
   function handleUpdateUser({ name, about }) {
     api.editProfile(name, about).then((res) => {
@@ -107,6 +156,19 @@ function App() {
     })
   }
 
+  function signOut() {
+    localStorage.removeItem('jwt');
+    setIsAuth(false);
+    setUserData({});
+    history('/register');
+  }
+
+  useEffect(() => {
+    if (isAuth) {
+      history("/");
+    }
+  }, [isAuth]);
+
   useEffect(() => {
     api.getProfile()
       .then(res => {
@@ -128,23 +190,31 @@ function App() {
 
   }, [])
 
+  const hery = 'hery'
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
-        {/* <Register onSignUp={handleSignUp}/> */}
-        <Login onSignIn={handleSignIn}/>
 
-        {/* <ProtectedRoute> */}
-        {/* <Main onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          cards={cards}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete} /> */}
-        {/* </ProtectedRoute>     */}
+        <Routes>
+          <Route exact path="/login" isAuth={isAuth} element={<Login onSignIn={handleSignIn} tockenCheck={tockenCheck} redirectToRegister={redirectToRegister} />}></Route>
+          <Route exact path="/register" isAuth={isAuth} element={<Register onSignUp={handleSignUp} redirectToLogin={redirectToLogin} />}></Route>
+          <Route path="/" element={
+            <ProtectedRoute isAuth={isAuth} hery={hery}>
+              <Header isAuth={isAuth} userData={userData} title={'Выйти'} handleClick={signOut} />
+              <Main onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onEditAvatar={handleEditAvatarClick}
+                onCardClick={handleCardClick}
+                cards={cards}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete} />
+            </ProtectedRoute>
+          }></Route>
+          <Route element={isAuth ? <Navigate to="/" /> : <Navigate to="/login" />}></Route>
+        </Routes>
 
+        <InfoTooltip tooltipData={tooltipData} onClose={closeAllPopups} />
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
         <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleNewCardSubmit} />
