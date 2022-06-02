@@ -6,7 +6,7 @@ function Login({ onSignIn, redirectToRegister }) {
 
     return (
         <>
-            <Header title={'Регистрация'} handleClick={redirectToRegister}/>
+            <Header title={'Регистрация'} handleClick={redirectToRegister} />
             <AuthForm title={'Вход'} onSubmit={onSignIn} buttonTitle={'Войти'} />
         </>
     );

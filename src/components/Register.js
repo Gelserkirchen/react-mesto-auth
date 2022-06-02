@@ -5,7 +5,7 @@ import Header from './Header'
 function Register({ onSignUp, redirectToLogin }) {
 
     function handleSubmit(formParams) {
-        let { email, password } = formParams;
+        const { email, password } = formParams;
         onSignUp({ email, password })
     }
 

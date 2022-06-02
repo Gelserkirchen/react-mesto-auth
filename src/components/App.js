@@ -81,11 +81,11 @@ function App() {
 
   function tockenCheck() {
     if (localStorage.getItem('jwt')) {
-      let jwt = localStorage.getItem('jwt');
+      const jwt = localStorage.getItem('jwt');
       auth.isAuth(jwt).then((res) => {
 
         if (res) {
-          let userData = {
+          const userData = {
             email: res.data.email
           }
 
@@ -154,14 +154,8 @@ function App() {
     localStorage.removeItem('jwt');
     setIsAuth(false);
     setUserData({});
-    history('/signup');
+    history('/signin');
   }
-
-  useEffect(() => {
-    if (isAuth) {
-      history("/");
-    }
-  }, [isAuth]);
 
   useEffect(() => {
     api.getProfile()

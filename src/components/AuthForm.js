@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 
-function AuthForm({ title, onSubmit, buttonTitle, redirect = ''}) {
+function AuthForm({ title, onSubmit, buttonTitle, redirect = '' }) {
     const [formParams, setFormParams] = useState({
         email: '',
         password: '',

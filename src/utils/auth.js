@@ -38,12 +38,11 @@ class Auth {
         })
             .then(res => res.ok ? res.json() : Promise.reject('Ошибка: ', res.status))
     }
-}    
+}
 
 export const auth = new Auth({
     baseUrl: 'https://auth.nomoreparties.co',
     headers: {
-        // authorization: 'a9707e34-62b5-41bf-b58b-1d72c6c41940',
         'Content-Type': 'application/json'
     }
 }); 
